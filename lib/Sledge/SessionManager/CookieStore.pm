@@ -129,18 +129,15 @@ Sledge::SessionManager::CookieStore - Store session in Cookie
 
 head1 DESCRIPTION
 
-Sledge::SessionManager::CookieStore is a session manager and session
-that uses Cookie for session storage.
+Sledge::SessionManager::CookieStore は SessionManager として利用でき、
+セッションの中身をCookieに書き込みます。
 
 =head1 AUTHOR
 
-Tatsuhiko Miyagawa E<lt>miyagawa@bulknews.netE<gt>
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
+Tatsuhiko Miyagawa with Sledge development team.
 
 =head1 SEE ALSO
 
-L<>
+L<Storable>, L<MIME::Base64>, L<Crypt::CBC>, L<Crypt::Blowfish>
 
 =cut
