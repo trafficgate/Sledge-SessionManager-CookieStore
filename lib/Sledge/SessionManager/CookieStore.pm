@@ -2,7 +2,7 @@ package Sledge::SessionManager::CookieStore;
 
 use strict;
 use vars qw($VERSION);
-$VERSION = 0.01;
+$VERSION = 0.02;
 
 use CGI::Cookie;
 use base qw(Sledge::SessionManager);
@@ -60,6 +60,7 @@ sub set_session {
         -path   => $config->cookie_path,
     );
     $options{'-domain'} = $config->cookie_domain if $config->cookie_domain;
+    $options{'-secure'} = 1 if eval {$config->cookie_secure};
 
     my $cookie = CGI::Cookie->new(%options);
     my $string = $cookie->as_string;
@@ -126,11 +127,30 @@ Sledge::SessionManager::CookieStore - Store session in Cookie
   package Your::Config;
   # if your data should be secure
   $C{COOKIE_STORE_KEY} = 'key_for_cbc_encryption';
+  $C{COOKIE_SECURE}    = 1;
 
-head1 DESCRIPTION
+=head1 DESCRIPTION
 
 Sledge::SessionManager::CookieStore は SessionManager として利用でき、
 セッションの中身をCookieに書き込みます。
+
+=head1 CONFIGURATION
+
+=over 4
+
+=item COOKIE_STORE_KEY
+
+  $C{COOKIE_STORE_KEY} = 'key_for_cbc_encryption';
+
+Cookie データを CBC アルゴリズムで可逆暗号化します。C<COOKIE_STORE_KEY> で指定したキーを暗号化のキーとして利用します。デフォルトでは暗号化しません(Storable + Base64)。
+
+=item COOKIE_SECURE
+
+  $C{COOKIE_SECURE}    = 1;
+
+Cookie に Secure フラグをつけます。デフォルトはつけません。
+
+=back
 
 =head1 AUTHOR
 

@@ -1,5 +1,5 @@
 use strict;
-use Test::More 'no_plan';
+use Test::More tests => 10;
 
 use lib 't/lib';
 
@@ -7,7 +7,7 @@ package Mock::Pages;
 use base qw(Sledge::TestPages);
 use Sledge::SessionManager::CookieStore;
 
-use vars qw($TMPL_PATH $COOKIE_NAME $COOKIE_STORE_KEY);
+use vars qw($TMPL_PATH $COOKIE_NAME $COOKIE_STORE_KEY $COOKIE_SECURE);
 $TMPL_PATH = "t/view";
 $COOKIE_NAME = 'sid';
 
@@ -58,7 +58,18 @@ for my $key ('', 'fooo') {
 	my $sid2 = ($out =~ /session_id: (.*)/)[0];
 	is $sid, $sid2;
     }
+
+    {
+	delete $ENV{HTTP_COOKIE};
+	$Mock::Pages::COOKIE_SECURE = 1;
+	my $p = Mock::Pages->new;
+	$p->dispatch('foo');
+
+	my $out = $p->output;
+	like $out, qr/secure/;
+    }
 }
+
 
 
 
